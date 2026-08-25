@@ -1,0 +1,3 @@
+a. The three improvements I made to the code was making it more detailed, giving it a transcript so you can see what the product looks like along with any issues that may appear, and added a validateset witch will reject any item if it is not allowed in the list.
+The biggest improvement in my opinion is the validate set because it makes the script more secure, even if its not as cool as the transcript. 
+The validate set was also the easiest to implement in my option, while it has a bit more code than the transcript, its also in one section where as the transcript code I had to type out twice. 
