@@ -1,0 +1,27 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20260825155256
+Username: PA-Tyler\student
+RunAs User: PA-Tyler\student
+Configuration Name: 
+Machine: PA-Tyler (Microsoft Windows NT 10.0.26100.0)
+Host Application: C:\Windows\system32\WindowsPowerShell\v1.0\PowerShell_ISE.exe
+Process ID: 1140
+PSVersion: 5.1.26100.33296
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.33296
+BuildVersion: 10.0.26100.33296
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is .\ResourceGroupLog-20260825-155256.txt
+Attempting to create Resource Group create-resourcegroup in centralus ...
+PS>TerminatingError(New-AzResourceGroup): "The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: Run Connect-AzAccount to login."
+Error: Failed to create the resource group.
+Run Connect-AzAccount to login.
+**********************
+Windows PowerShell transcript end
+End time: 20260825155256
+**********************
