@@ -67,7 +67,7 @@ Continue with this operation?
 VERBOSE: Script execution completed successfully.
 Status: Completed
 
-
+  
 Test Name: I made it creae-resourcegroup-test. 
 Exepcted result: I was expecting it to say success and have the test time
 Actual results: It worked exactly how I planned.
