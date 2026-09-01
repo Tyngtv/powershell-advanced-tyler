@@ -66,6 +66,11 @@ Continue with this operation?
 
 VERBOSE: Script execution completed successfully.
 Status: Completed
+
+
+Test Name: I made it creae-resourcegroup-test. 
+Exepcted result: I was expecting it to say success and have the test time
+Actual results: It worked exactly how I planned.
 Transcript stopped, output file is C:\powershell-advanced-tyler\LM1\ResourceGroupLog-20260901-074510.txt
 **Observed Differances**: Verbose flows continuously without pausing. It prints the messages to the screen instantly while executing the code. Debug pauses the script automatically and prompts you for conformation before allowing the next line of code to execute. 
 
