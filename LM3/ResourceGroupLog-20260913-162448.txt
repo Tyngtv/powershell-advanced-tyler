@@ -1,0 +1,42 @@
+**********************
+PowerShell transcript start
+Start time: 20260913162448
+Username: PA-Tyler\student
+RunAs User: PA-Tyler\student
+Configuration Name: 
+Machine: PA-Tyler (Microsoft Windows NT 10.0.26100.0)
+Host Application: C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.6.0_x64__8wekyb3d8bbwe\pwsh.dll -noexit -command try { . "c:\Program Files\Microsoft VS Code\08d4889f9e\resources\app\out\vs\workbench\contrib\terminal\common\scripts\shellIntegration.ps1" } catch {}
+Process ID: 6980
+PSVersion: 7.6.6
+PSEdition: Core
+GitCommitId: 7.6.6
+OS: Microsoft Windows 10.0.26100
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is .\ResourceGroupLog-20260913-162448.txt
+Status: Initializing...
+Status: Processing data...
+Attempting to create Resource Group centralus in centralus ...
+
+ResourceGroupName : centralus
+Location          : centralus
+ProvisioningState : Succeeded
+Tags              : 
+                    Name         Value
+                    ===========  =====
+                    Environment  Test
+                    Department   IT
+
+ResourceId        : /subscriptions/a54bee09-fab5-4410-b37d-178bdccfa0b3/resourceGroups/centralus
+
+Success! Resource Group created successfully.
+Status: Finalizing and cleaning up...
+Status: Completed
+**********************
+PowerShell transcript end
+End time: 20260913162449
+**********************
