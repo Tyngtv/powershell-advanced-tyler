@@ -1,4 +1,24 @@
-﻿function New-TestResourceGroup {
+﻿<#
+.SYNOPSIS
+    Creates test resource groups and records the operation in a log file.
+
+.DESCRIPTION
+    Creates Azure resource groups for the supplied resource group names or project IDs,
+    and writes progress messages to a timestamped module log.
+
+.PARAMETER ResourceGroupName
+    The name of the resource group to create.
+
+.PARAMETER ProjectID
+    The project ID used to construct a resource group name with the RG- prefix.
+
+.PARAMETER Location
+    The Azure location in which to create the resource group.
+
+.PARAMETER Tags
+    Tags to assign to the resource group.
+#>
+function New-TestResourceGroup {
     [CmdletBinding(SupportsShouldProcess=$true, DefaultParameterSetName='ResourceGroupName')]
     param (
         [Parameter(Mandatory=$true, ParameterSetName='ResourceGroupName', ValueFromPipeline=$true)]
@@ -23,15 +43,8 @@
         $resourcesCreated = 0
         $resourcesSkipped = 0
         $errorsEncountered = 0
-        $transcriptStarted = $false
-
-        $transcriptPath = ".\ResourceGroupLog-$(Get-Date -Format 'yyyyMMdd-HHmmss').txt"
-        try {
-            Start-Transcript -Path $transcriptPath -ErrorAction Stop | Out-Null
-            $transcriptStarted = $true
-        } catch {
-            Write-Warning "Could not start transcript: $($_.Exception.Message)"
-        }
+        $logPath = ".\ResourceGroupLog-$(Get-Date -Format 'yyyyMMdd-HHmmss').txt"
+        Write-ModuleLog -Path $logPath -Message 'New-TestResourceGroup function started.'
 
         Write-Verbose 'New-TestResourceGroup function started; initialized counters and logging.'
         Write-Host 'Starting resource group creation.' -ForegroundColor Cyan
@@ -59,6 +72,7 @@
         try {
             Write-Host "Attempting to create resource group '$resolvedResourceGroupName' in $Location..." -ForegroundColor Cyan
             Write-Verbose "Attempting to create resource group '$resolvedResourceGroupName' in '$Location'."
+            Write-ModuleLog -Path $logPath -Message "Attempting to create resource group '$resolvedResourceGroupName' in '$Location'."
 
             if ($PSCmdlet.ShouldProcess("Resource Group '$resolvedResourceGroupName'", 'Create')) {
                 New-AzResourceGroup -Name $resolvedResourceGroupName -Location $Location -Tag $Tags -ErrorAction Stop | Out-Null
@@ -66,14 +80,17 @@
                 $resourcesCreated++
                 Write-Host "Resource group '$resolvedResourceGroupName' created successfully." -ForegroundColor Green
                 Write-Verbose "Resource group '$resolvedResourceGroupName' completed successfully."
+                Write-ModuleLog -Path $logPath -Message "Resource group '$resolvedResourceGroupName' created successfully."
             } else {
                 $result.Status = 'Skipped'
                 $resourcesSkipped++
+                Write-ModuleLog -Path $logPath -Message "Resource group '$resolvedResourceGroupName' was skipped."
             }
         } catch {
             $result.Status = 'Failed'
             $errorsEncountered++
             Write-Host "Failed to create resource group '$resolvedResourceGroupName': $($_.Exception.Message)" -ForegroundColor Red
+            Write-ModuleLog -Path $logPath -Message "Failed to create resource group '$resolvedResourceGroupName': $($_.Exception.Message)"
         }
 
         $result
@@ -88,8 +105,6 @@
         Write-Host ('  Resources skipped        : {0}' -f $resourcesSkipped)
         Write-Host ('  Errors encountered       : {0}' -f $errorsEncountered)
         Write-Verbose "Function completed: $totalRequestsProcessed requests processed; $resourcesCreated created, $resourcesSkipped skipped, $errorsEncountered errors."
-        if ($transcriptStarted) {
-            Stop-Transcript | Out-Null
-        }
+        Write-ModuleLog -Path $logPath -Message "Function completed: $totalRequestsProcessed requests processed; $resourcesCreated created, $resourcesSkipped skipped, $errorsEncountered errors."
     }
 }
