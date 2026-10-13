@@ -11,3 +11,6 @@ NWTC.ResourceGroups Module
 
 During task 5, I created release notes that show people what had changed, what issues are known, bug fixes that have been taken care of and the new features. 
 
+During Task 6, I ran into issues with the Get-ResourceGroupSummary not working, I had to modify some things, but it works now. Note: THIS WAS VERY FRUSTRATING TO FIGURE OUT. 
+
+
