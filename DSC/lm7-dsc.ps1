@@ -1,6 +1,6 @@
 Configuration TylerBaseline
 {
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
+    Import-DscResource -ModuleName PSDscResources
 
     Node localhost
     {
