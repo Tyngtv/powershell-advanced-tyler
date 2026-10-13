@@ -7,7 +7,7 @@
     and writes progress messages to a timestamped module log.
 
 .PARAMETER ResourceGroupName
-    The name of the resource group to create.
+    One or more resource group names to create. Names can also be supplied through the pipeline.
 
 .PARAMETER ProjectID
     The project ID used to construct a resource group name with the RG- prefix.
@@ -22,7 +22,7 @@ function New-TestResourceGroup {
     [CmdletBinding(SupportsShouldProcess=$true, DefaultParameterSetName='ResourceGroupName')]
     param (
         [Parameter(Mandatory=$true, ParameterSetName='ResourceGroupName', ValueFromPipeline=$true)]
-        [string]$ResourceGroupName,
+        [string[]]$ResourceGroupName,
 
         [Parameter(Mandatory=$true, ParameterSetName='ProjectID')]
         [string]$ProjectID,
@@ -51,49 +51,51 @@ function New-TestResourceGroup {
     }
 
     process {
-        $totalRequestsProcessed++
-
-        $resolvedResourceGroupName = if ($PSCmdlet.ParameterSetName -eq 'ProjectID') {
-            "RG-$ProjectID"
+        $resourceGroupNames = if ($PSCmdlet.ParameterSetName -eq 'ProjectID') {
+            @("RG-$ProjectID")
         } else {
             $ResourceGroupName
         }
 
-        $result = [PSCustomObject]@{
-            ResourceGroupName = $resolvedResourceGroupName
-            Location          = $Location
-            Status            = 'Not Created'
-            Tags              = $Tags
-            Timestamp         = Get-Date
-        }
+        foreach ($resolvedResourceGroupName in $resourceGroupNames) {
+            $totalRequestsProcessed++
 
-        Write-Verbose "Validation succeeded for resource group '$resolvedResourceGroupName' in '$Location'."
-
-        try {
-            Write-Host "Attempting to create resource group '$resolvedResourceGroupName' in $Location..." -ForegroundColor Cyan
-            Write-Verbose "Attempting to create resource group '$resolvedResourceGroupName' in '$Location'."
-            Write-ModuleLog -Path $logPath -Message "Attempting to create resource group '$resolvedResourceGroupName' in '$Location'."
-
-            if ($PSCmdlet.ShouldProcess("Resource Group '$resolvedResourceGroupName'", 'Create')) {
-                New-AzResourceGroup -Name $resolvedResourceGroupName -Location $Location -Tag $Tags -ErrorAction Stop | Out-Null
-                $result.Status = 'Created'
-                $resourcesCreated++
-                Write-Host "Resource group '$resolvedResourceGroupName' created successfully." -ForegroundColor Green
-                Write-Verbose "Resource group '$resolvedResourceGroupName' completed successfully."
-                Write-ModuleLog -Path $logPath -Message "Resource group '$resolvedResourceGroupName' created successfully."
-            } else {
-                $result.Status = 'Skipped'
-                $resourcesSkipped++
-                Write-ModuleLog -Path $logPath -Message "Resource group '$resolvedResourceGroupName' was skipped."
+            $result = [PSCustomObject]@{
+                ResourceGroupName = $resolvedResourceGroupName
+                Location          = $Location
+                Status            = 'Not Created'
+                Tags              = $Tags
+                Timestamp         = Get-Date
             }
-        } catch {
-            $result.Status = 'Failed'
-            $errorsEncountered++
-            Write-Host "Failed to create resource group '$resolvedResourceGroupName': $($_.Exception.Message)" -ForegroundColor Red
-            Write-ModuleLog -Path $logPath -Message "Failed to create resource group '$resolvedResourceGroupName': $($_.Exception.Message)"
-        }
 
-        $result
+            Write-Verbose "Validation succeeded for resource group '$resolvedResourceGroupName' in '$Location'."
+
+            try {
+                Write-Host "Attempting to create resource group '$resolvedResourceGroupName' in $Location..." -ForegroundColor Cyan
+                Write-Verbose "Attempting to create resource group '$resolvedResourceGroupName' in '$Location'."
+                Write-ModuleLog -Path $logPath -Message "Attempting to create resource group '$resolvedResourceGroupName' in '$Location'."
+
+                if ($PSCmdlet.ShouldProcess("Resource Group '$resolvedResourceGroupName'", 'Create')) {
+                    New-AzResourceGroup -Name $resolvedResourceGroupName -Location $Location -Tag $Tags -ErrorAction Stop | Out-Null
+                    $result.Status = 'Created'
+                    $resourcesCreated++
+                    Write-Host "Resource group '$resolvedResourceGroupName' created successfully." -ForegroundColor Green
+                    Write-Verbose "Resource group '$resolvedResourceGroupName' completed successfully."
+                    Write-ModuleLog -Path $logPath -Message "Resource group '$resolvedResourceGroupName' created successfully."
+                } else {
+                    $result.Status = 'Skipped'
+                    $resourcesSkipped++
+                    Write-ModuleLog -Path $logPath -Message "Resource group '$resolvedResourceGroupName' was skipped."
+                }
+            } catch {
+                $result.Status = 'Failed'
+                $errorsEncountered++
+                Write-Host "Failed to create resource group '$resolvedResourceGroupName': $($_.Exception.Message)" -ForegroundColor Red
+                Write-ModuleLog -Path $logPath -Message "Failed to create resource group '$resolvedResourceGroupName': $($_.Exception.Message)"
+            }
+
+            $result
+        }
     }
 
     end {
