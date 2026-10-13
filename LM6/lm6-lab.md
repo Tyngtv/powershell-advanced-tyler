@@ -7,4 +7,4 @@
 - **Description:** Test resource groups creation
 - **Exported command:** `New-TestResourceGroup`
 
-`Write-ModuleLog` is a private helper and is not exported as a command.
+
