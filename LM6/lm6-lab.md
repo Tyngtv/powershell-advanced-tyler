@@ -1,6 +1,6 @@
-# LM6 Lab
+LM6 Lab
 
-## NWTC.ResourceGroups Module
+NWTC.ResourceGroups Module
 
 - **Current version:** 1.0.0
 - **Author:** Tyler Krause
