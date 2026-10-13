@@ -3,3 +3,5 @@ $publicFunctions = Get-ChildItem -Path "$PSScriptRoot\Public\*.ps1" -ErrorAction
 foreach ($functionFile in $publicFunctions) {
 	. $functionFile.FullName
 }
+
+Export-ModuleMember -Function $publicFunctions.BaseName
